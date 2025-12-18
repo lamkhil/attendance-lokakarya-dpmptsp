@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\AttendanceSessions\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -26,15 +28,9 @@ class AttendanceSessionsTable
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('status')
+                    ->badge()
                     ->searchable(),
-                TextColumn::make('created_by')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('updated_by')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('deleted_by')
-                    ->numeric()
+                TextColumn::make('createdBy.name')
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -51,6 +47,9 @@ class AttendanceSessionsTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                Action::make('share')
+                    ->label('Bagikan')
+                    ->icon(Heroicon::QrCode),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

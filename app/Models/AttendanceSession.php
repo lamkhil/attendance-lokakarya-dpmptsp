@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class AttendanceSession extends Model
 {
-    //
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

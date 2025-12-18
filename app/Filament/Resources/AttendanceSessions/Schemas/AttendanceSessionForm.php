@@ -3,8 +3,10 @@
 namespace App\Filament\Resources\AttendanceSessions\Schemas;
 
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 class AttendanceSessionForm
 {
@@ -12,23 +14,17 @@ class AttendanceSessionForm
     {
         return $schema
             ->components([
-                TextInput::make('slug')
-                    ->required(),
+                Hidden::make('slug')
+                    ->unique(table: 'attendance_sessions', column: 'slug', ignoreRecord: true)
+                    ->default(Str::random(8)),
                 TextInput::make('name')
-                    ->required(),
+                    ->required()
+                    ->columnSpanFull(),
                 DateTimePicker::make('start_time')
                     ->required(),
                 DateTimePicker::make('end_time'),
-                TextInput::make('status')
-                    ->required()
-                    ->default('draft'),
-                TextInput::make('created_by')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('updated_by')
-                    ->numeric(),
-                TextInput::make('deleted_by')
-                    ->numeric(),
+                Hidden::make('created_by')
+                    ->default(fn () => auth()->id()),
             ]);
     }
 }
